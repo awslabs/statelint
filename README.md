@@ -29,7 +29,7 @@ Currently covers most of the grammatical constraints for state-machine
 definitions.  The checking of JsonPath syntax is hand-built and probably
 imperfect.
 
-At the moment, does not catch linkages from between top-level states
+At the moment, does not catch linkages between top-level states
 and nested Parallel branches.
 
 Also, does not verify that a state machine has a terminal state.
