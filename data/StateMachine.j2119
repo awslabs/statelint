@@ -1,0 +1,111 @@
+This document specifies a JSON object called a "State Machine".
+A State Machine MUST have an object field named "States"; each field is a "State".
+A State Machine MUST have a string field named "StartAt".
+A State Machine MAY have a string field named "Comment".
+A State Machine MAY have a string field named "Version".
+A State Machine MAY have a positive-integer field named "TimeoutSeconds" whose value MUST be less than 99999999.
+A State MUST have a string field named "Type" whose value MUST be one of "Pass", "Succeed", "Fail", "Task", "Choice", "Wait", or "Parallel".
+A State whose "Type" field's value is "Pass" is a "Pass State".
+A State whose "Type" field's value is "Succeed" is a "Succeed State".
+A State whose "Type" field's value is "Fail" is a "Fail State".
+A State whose "Type" field's value is "Task" is a "Task State".
+A State whose "Type" field's value is "Choice" is a "Choice State".
+A State whose "Type" field's value is "Wait" is a "Wait State".
+A State whose "Type" field's value is "Parallel" is a "Parallel State".
+A State MAY have a string field named "Comment".
+Each of a Pass State, a Task State, a Wait State, and a Parallel State MAY have a boolean field named "End".
+A State whose "End" field's value is true is a "Terminal State".
+Each of a Succeed State and a Fail State is a "Terminal State".
+A State which is not a Terminal State or a Choice State MUST have a string field named "Next".
+A Terminal State MUST NOT have a field named "Next".
+A State MAY have a nullable-JSONPath field named "InputPath".
+A State MAY have a nullable-referencePath field named "ResultPath".
+A State MAY have a nullable-JSONPath field named "OutputPath".
+A Pass State MAY have a field named "Result".
+A Fail State MUST NOT have a field named "InputPath".
+A Fail State MUST NOT have a field named "ResultPath".
+A Fail State MUST NOT have a field named "OutputPath".
+A Fail State MUST have a string field named "Cause".
+A Fail State MUST have a string field named "Error".
+Each of a Task State and a Parallel State MAY have an object-array field named "Retry"; each element is a "Retrier".
+A Task State MUST have a URI field named "Resource".
+A Task State MAY have a positive-integer field named "TimeoutSeconds" whose value MUST be less than 99999999.
+A Task State MAY have a positive-integer field named "HeartbeatSeconds" whose value MUST be less than 99999999.
+A Retrier MUST have a string-array field named "ErrorEquals".
+A Retrier MAY have an positive-integer field named "IntervalSeconds".
+A Retrier MAY have a nonnegative-integer field named "MaxAttempts" whose value MUST be less than 99999999.
+A Retrier MAY have a float field named "BackoffRate" whose value MUST be greater than or equal to 1.0.
+Each of a Task State and a Parallel State MAY have an object-array field named "Catch"; each element is a "Catcher".
+A Catcher MUST have an string-array field named "ErrorEquals".
+A Catcher MUST have a string field named "Next".
+A Choice State MUST have a nonempty-object-array field named "Choices"; each element is a "Choice Rule".
+A Choice State MUST NOT have a field named "Next".
+A Choice State MUST NOT have a field named "End".
+A Choice State MAY have a string field named "Default".
+A Choice Rule MAY have a nonempty-object-array field named "And"; each element is a "Nested Rule".
+A Choice Rule MAY have a nonempty-object-array field named "Or"; each element is a "Nested Rule".
+A Choice Rule MAY have an object field named "Not"; its value is a "Nested Rule".
+A Choice Rule MUST have a string field named "Next".
+A Choice Rule with an "And" field is a "Boolean".
+A Choice Rule with an "Or" field is a "Boolean".
+A Choice Rule with a "Not" field is a "Boolean".
+A Choice Rule MAY have a referencePath field named "Variable".
+A Choice Rule with a "Variable" field is a "Comparison".
+A Comparison MUST have a field named one of "StringEquals", "StringLessThan", "StringGreaterThan", "StringLessThanEquals", "StringGreaterThanEquals", "NumericEquals", "NumericLessThan", "NumericGreaterThan", "NumericLessThanEquals", "NumericGreaterThanEquals", "BooleanEquals", "TimestampEquals", "TimestampLessThan", "TimestampGreaterThan", "TimestampLessThanEquals", or "TimestampGreaterThanEquals".
+A Comparison MAY have a string field named "StringEquals".
+A Comparison MAY have a string field named "StringLessThan".
+A Comparison MAY have a string field named "StringGreaterThan".
+A Comparison MAY have a string field named "StringLessThanEquals".
+A Comparison MAY have a string field named "StringGreaterThanEquals".
+A Comparison MAY have a numeric field named "NumericEquals".
+A Comparison MAY have a numeric field named "NumericLessThan".
+A Comparison MAY have a numeric field named "NumericGreaterThan".
+A Comparison MAY have a numeric field named "NumericLessThanEquals".
+A Comparison MAY have a numeric field named "NumericGreaterThanEquals".
+A Comparison MAY have a boolean field named "BooleanEquals".
+A Comparison MAY have a timestamp field named "TimestampEquals".
+A Comparison MAY have a timestamp field named "TimestampLessThan".
+A Comparison MAY have a timestamp field named "TimestampGreaterThan".
+A Comparison MAY have a timestamp field named "TimestampLessThanEquals".
+A Comparison MAY have a timestamp field named "TimestampGreaterThanEquals".
+A Comparison MUST NOT have a field named "And".
+A Comparison MUST NOT have a field named "Or".
+A Comparison MUST NOT have a field named "Not".
+A Nested Rule MAY have a nonempty-object-array field named "And"; each element is a "Nested Rule".
+A Nested Rule MAY have a nonempty-object-array field named "Or"; each element is a "Nested Rule".
+A Nested Rule MAY have an object field named "Not"; its value is a "Nested Rule".
+A Nested Rule with an "And" field is a "Nested Boolean".
+A Nested Rule with an "Or" field is a "Nested Boolean".
+A Nested Rule with a "Not" field is a "Nested Boolean".
+A Nested Rule MUST NOT have a field named "Next".
+A Nested Rule MAY have a referencePath field named "Variable".
+A Nested Rule with a "Variable" field is a "Nested Comparison".
+A Nested Comparison MAY have a string field named "StringEquals".
+A Nested Comparison MAY have a string field named "StringLessThan".
+A Nested Comparison MAY have a string field named "StringGreaterThan".
+A Nested Comparison MAY have a string field named "StringLessThanEquals".
+A Nested Comparison MAY have a string field named "StringGreaterThanEquals".
+A Nested Comparison MAY have a numeric field named "NumericEquals".
+A Nested Comparison MAY have a numeric field named "NumericLessThan".
+A Nested Comparison MAY have a numeric field named "NumericGreaterThan".
+A Nested Comparison MAY have a numeric field named "NumericLessThanEquals".
+A Nested Comparison MAY have a numeric field named "NumericGreaterThanEquals".
+A Nested Comparison MAY have a boolean field named "BooleanEquals".
+A Nested Comparison MAY have a timestamp field named "TimestampEquals".
+A Nested Comparison MAY have a timestamp field named "TimestampLessThan".
+A Nested Comparison MAY have a timestamp field named "TimestampGreaterThan".
+A Nested Comparison MAY have a timestamp field named "TimestampLessThanEquals".
+A Nested Comparison MAY have a timestamp field named "TimestampGreaterThanEquals".
+A Nested Comparison MUST NOT have a field named "And".
+A Nested Comparison MUST NOT have a field named "Or".
+A Nested Comparison MUST NOT have a field named "Not".
+A Wait State MAY have a positive-integer field named "Seconds".
+A Wait State MAY have a referencePath field named "SecondsPath".
+A Wait State MAY have a timestamp field named "Timestamp".
+A Wait State MAY have a referencePath field named "TimestampPath".
+A Wait State MUST have only one of "Seconds", "SecondsPath", "Timestamp", and "TimestampPath".
+A Wait State MUST have a field named one of "Seconds", "SecondsPath", "Timestamp", or "TimestampPath".
+A Parallel State MUST have an object-array field named "Branches"; each element is a "Branch".
+A Branch MUST have an object field named "States"; each element is a "State".
+A Branch MUST have a string field named "StartAt".
+A Branch MAY have a string field named "Comment".
