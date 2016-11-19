@@ -30,6 +30,7 @@ module StateMachineLint
       end
 
       check_StartAt_States(node, path, problems)
+      check_for_terminal(node, path, problems)
       check_next(node, path)
 
       check_States_ALL(node['Retry'], path + '.Retry', problems)
@@ -78,6 +79,25 @@ module StateMachineLint
       end
     end
 
+    def check_for_terminal(node, path, problems)
+      if node['States'] && node['States'].is_a?(Hash)
+        terminal_found = false
+        node['States'].each_value do |state_node|
+          if state_node.is_a?(Hash)
+            if [ 'Succeed', 'Fail' ].include?(state_node['Type'])
+              terminal_found = true
+            elsif state_node['End'] == true
+              terminal_found = true
+            end
+          end
+        end
+
+        if !terminal_found
+          problems << "No terminal state found in machine at #{path}.States"
+        end
+      end
+    end
+    
     def check_StartAt_States(node, path, problems)
 
       # Is there a StartAt field that points at one of the children?
@@ -93,7 +113,6 @@ module StateMachineLint
           @states[state_name] = path
         end
       end
-
     end
 
     def check_States_ALL(node, path, problems)

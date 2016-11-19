@@ -32,8 +32,6 @@ imperfect.
 At the moment, does not catch linkages between top-level states
 and nested Parallel branches.
 
-Also, does not verify that a state machine has a terminal state.
-
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub 

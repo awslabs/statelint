@@ -49,7 +49,7 @@ describe StateMachineLint::StateNode do
     checker = StateMachineLint::StateNode.new
     checker.check(json, 'a.b', problems)
     checker.check_linkages(problems)
-    expect(problems.size).to eq(2)
+    expect(problems.size).to eq(4)
   end
   
   it 'should find States.ALL not in end position' do
@@ -123,7 +123,7 @@ describe StateMachineLint::StateNode do
     checker = StateMachineLint::StateNode.new
     checker.check(json, 'a.b', problems)
     checker.check_linkages(problems)
-    expect(problems.size).to eq(1)
+    expect(problems.size).to eq(2)
   end
 
   it "should find un-pointed-to states" do
@@ -143,6 +143,27 @@ describe StateMachineLint::StateNode do
     checker = StateMachineLint::StateNode.new
     checker.check(json, 'a.b', problems)
     checker.check_linkages(problems)
+    expect(problems.size).to eq(1)
+  end
+
+  it "should find missing terminal state" do
+    text = {
+      "StartAt"=> "A",
+      "States"=> {
+        "A" => {
+          "Type" => "Pass",
+          "Next" => "B",
+        },
+        "B" => {
+          "Type" => "C",
+          "Next" => "A"
+        }
+      }
+    }
+    json = JSON.parse(JSON.pretty_generate(text))
+    problems = []
+    checker = StateMachineLint::StateNode.new
+    checker.check(json, 'a.b', problems)
     expect(problems.size).to eq(1)
   end
 end
