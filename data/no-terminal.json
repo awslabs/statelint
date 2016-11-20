@@ -1,0 +1,45 @@
+{
+  "StartAt": "FirstState",
+  "States": {
+    "FirstState": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:ACCOUNT_ID:function:FUNCTION_NAME",
+      "Next": "ChoiceState"
+    },
+
+    "ChoiceState": {
+      "Type" : "Choice",
+      "Choices": [
+        {
+          "Variable": "$.foo",
+          "NumericEquals": 3,
+          "Next": "FirstMatchState"
+        },
+        {
+          "Variable": "$.foo",
+          "NumericEquals": 4,
+          "Next": "SecondMatchState"
+        }
+      ],
+      "Default": "NextState"
+    },
+	
+    "FirstMatchState": {
+      "Type" : "Task",
+      "Resource": "arn:aws:lambda:us-east-1::function:OnFirstMatch",
+      "Next": "NextState"
+    },
+	
+    "SecondMatchState": {
+      "Type" : "Task",
+      "Resource": "arn:aws:lambda:us-east-1::function:OnSecondMatch",
+      "Next": "NextState"
+    },
+
+    "NextState": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:ACCOUNT_ID:function:FUNCTION_NAME",
+      "Next": "SecondMatchState"
+    }
+  }
+}

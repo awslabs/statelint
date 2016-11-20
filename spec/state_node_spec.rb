@@ -166,4 +166,13 @@ describe StateMachineLint::StateNode do
     checker.check(json, 'a.b', problems)
     expect(problems.size).to eq(1)
   end
+
+  it 'should handle complex missing terminal' do
+    j = File.read "data/no-terminal.json"
+    j = JSON.parse j
+    problems = []
+    checker = StateMachineLint::StateNode.new
+    checker.check(j, 'a.b', problems)
+    problems.each {|p| puts "P #{p}"}
+  end
 end
