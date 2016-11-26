@@ -14,14 +14,22 @@
 
 module StateMachineLint
 
-  # Semantic validation on state nodes that can't be expressed in a
-  #  J2119 schema
+  # Semantic validation that can't be expressed in a J2119 schema
   #
   class StateNode
 
     def initialize
-      @nexts = {}
-      @states = {}
+      # We push States nodes on here when we traverse them.  
+      #  Then, whenever we find a "Next" or "Default" or "StartAt" node,
+      #  we validate that the target is there, and record that that
+      #  target has an incoming pointer
+      #
+      @current_states_node = []
+      @current_states_incoming = []
+
+      # We keep track of all the state names and complain about
+      #  dupes
+      @all_state_names = {}
     end
 
     def check(node, path, problems)
@@ -29,10 +37,36 @@ module StateMachineLint
         return
       end
 
-      check_StartAt_States(node, path, problems)
-      check_for_terminal(node, path, problems)
-      check_next(node, path)
+      is_machine_top = node.key?("States") && node['States'].is_a?(Hash)
+      if is_machine_top
+        @current_states_node << node['States']
+        start_at = node['StartAt']
+        if start_at && start_at.is_a?(String)
+          @current_states_incoming << [ start_at ]
+          if !node['States'].key?(start_at)
+            problems <<
+              "StartAt value #{start_at} not found in " +
+              "States field at #{path}"
+          end
+        else
+          @current_states_incoming << []
+        end
 
+        node['States'].keys.each do |name|
+          if @all_state_names[name]
+            problems <<
+              "State \"#{name}\", defined at #{path}.States, " +
+              "is also defined at #{@all_state_names[name]}"
+          else
+            @all_state_names[name] = "#{path}.States"
+          end
+        end
+      end
+
+      check_for_terminal(node, path, problems)
+
+      check_next(node, path, problems)
+        
       check_States_ALL(node['Retry'], path + '.Retry', problems)
       check_States_ALL(node['Catch'], path + '.Catch', problems)
 
@@ -47,35 +81,35 @@ module StateMachineLint
           check(val, "#{path}.#{name}", problems)
         end
       end
-    end
 
-    def check_linkages(problems)
-      @nexts.keys.each do |next_val|
-        if !@states[next_val]
-          problems <<
-            "State \"#{next_val}\" not found, " +
-            "referenced at #{@nexts[next_val]}"
-        end
-      end
-
-      @states.keys.each do |state_name|
-        if !@nexts[state_name]
-          problems <<
-            "No transition found to state \"#{state_name}\" " +
-            "defined at #{@states[state_name]}.States"
+      if is_machine_top
+        states = @current_states_node.pop
+        incoming = @current_states_incoming.pop
+        missing = states.keys - incoming
+        missing.each do |state|
+          problems << "No transition found to state #{path}.#{state}"
         end
       end
     end
 
-    def check_next(node, path)
-      add_next(node, path, 'Next')
-      add_next(node, path, 'Default')
+    def check_next(node, path, problems)
+      add_next(node, path, 'Next', problems)
+      add_next(node, path, 'Default', problems)
     end
 
-    def add_next(node, path, field)
+    def add_next(node, path, field, problems)
       if node[field] && node[field].is_a?(String)
-        next_val = node[field]
-        @nexts[next_val] = path  # over-write is OK
+        transition_to = node[field]
+
+        if !@current_states_node.empty?
+          if @current_states_node[-1].key?(transition_to)
+            @current_states_incoming[-1] << transition_to
+          else
+            problems <<
+              "No state found named \"#{transition_to}\", referenced at " +
+              "#{path}.#{field}"
+          end
+        end
       end
     end
 
@@ -98,23 +132,6 @@ module StateMachineLint
       end
     end
     
-    def check_StartAt_States(node, path, problems)
-
-      # Is there a StartAt field that points at one of the children?
-      if node['States'] && node['StartAt'] && node['StartAt'].is_a?(String)
-
-        @nexts[node['StartAt']] = path + ".StartAt"
-        node['States'].keys.each do |state_name|
-          if @states[state_name]
-            problems <<
-              "State name #{state_name} occurs at " + @states[state_name] +
-              " and also at " + path
-          end
-          @states[state_name] = path
-        end
-      end
-    end
-
     def check_States_ALL(node, path, problems)
       if !node.is_a?(Array)
         return

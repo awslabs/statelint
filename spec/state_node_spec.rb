@@ -29,7 +29,7 @@ describe StateMachineLint::StateNode do
     problems = []
     checker = StateMachineLint::StateNode.new
     checker.check(json, 'a.b', problems)
-    checker.check_linkages(problems)
+    # problems.each {|p| puts "P #{p}"}
     expect(problems.size).to eq(2)
   end
 
@@ -48,7 +48,6 @@ describe StateMachineLint::StateNode do
     problems = []
     checker = StateMachineLint::StateNode.new
     checker.check(json, 'a.b', problems)
-    checker.check_linkages(problems)
     expect(problems.size).to eq(4)
   end
   
@@ -104,7 +103,6 @@ describe StateMachineLint::StateNode do
     problems = []
     checker = StateMachineLint::StateNode.new
     checker.check(json, 'a.b', problems)
-    checker.check_linkages(problems)
     expect(problems.size).to eq(0)
   end
 
@@ -122,7 +120,6 @@ describe StateMachineLint::StateNode do
     problems = []
     checker = StateMachineLint::StateNode.new
     checker.check(json, 'a.b', problems)
-    checker.check_linkages(problems)
     expect(problems.size).to eq(2)
   end
 
@@ -142,7 +139,6 @@ describe StateMachineLint::StateNode do
     problems = []
     checker = StateMachineLint::StateNode.new
     checker.check(json, 'a.b', problems)
-    checker.check_linkages(problems)
     expect(problems.size).to eq(1)
   end
 
@@ -168,11 +164,31 @@ describe StateMachineLint::StateNode do
   end
 
   it 'should handle complex missing terminal' do
-    j = File.read "data/no-terminal.json"
+    j = File.read "test/no-terminal.json"
     j = JSON.parse j
     problems = []
     checker = StateMachineLint::StateNode.new
     checker.check(j, 'a.b', problems)
-    problems.each {|p| puts "P #{p}"}
+    expect(problems.size).to eq(1)
   end
+
+  it 'should catch linkage from one parallel branch to another' do
+    j = File.read "test/linked-parallel.json"
+    j = JSON.parse j
+    problems = []
+    checker = StateMachineLint::StateNode.new
+    checker.check(j, 'a.b', problems)
+    expect(problems.size).to eq(4)
+  end
+
+  it 'should catch duplicate state names, even in parallels' do
+    j = File.read "test/has-dupes.json"
+    j = JSON.parse j
+    problems = []
+    checker = StateMachineLint::StateNode.new
+    checker.check(j, 'a.b', problems)
+    expect(problems.size).to eq(1)
+    # problems.each {|p| puts "P #{p}"}
+  end
+
 end

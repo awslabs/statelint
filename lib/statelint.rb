@@ -35,7 +35,6 @@ module StateMachineLint
       problems = @validator.validate json
       checker = StateNode.new
       checker.check(@validator.parsed, @validator.root, problems)
-      checker.check_linkages(problems)
       problems
     end
   end

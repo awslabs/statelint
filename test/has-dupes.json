@@ -1,0 +1,34 @@
+{
+  "StartAt": "A",
+  "States": {
+    "A": {
+      "Type": "Parallel",
+      "Branches": [
+	{
+	  "StartAt": "Sub1_1",
+	  "States": {
+	    "Sub1_1": {
+	      "Type": "Succeed"
+	    }
+	  }
+	},
+	{
+	  "StartAt": "Sub2_1",
+	  "States": {
+	    "Sub2_1": {
+	      "Type": "Succeed"
+	    }
+	  }
+	}
+      ],
+      "Next": "X"
+    },
+    "X": {
+      "Type": "Pass",
+      "Next": "Sub2_1"
+    },
+    "Sub2_1": {
+      "Type": "Succeed"
+    }
+  }
+}

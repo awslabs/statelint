@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = 'timbray@amazon.com'
   s.executables << 'statelint'
   s.files       = `git ls-files`.split("\n").reject do |f|
-    f.match(%r{^spec/})
+    f.match(%r{^(spec|test)/})
   end
 
   s.homepage    = 'http://rubygems.org/gems/statelint'

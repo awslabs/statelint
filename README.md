@@ -29,8 +29,8 @@ Currently covers most of the grammatical constraints for state-machine
 definitions.  The checking of JsonPath syntax is hand-built and probably
 imperfect.
 
-At the moment, does not catch linkages between top-level states
-and nested Parallel branches.
+The Ruby JSON parser unfortunately doesn not detect duplicate keys
+in objects, so neither does statelint.
 
 ## Contributing
 
