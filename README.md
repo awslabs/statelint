@@ -29,7 +29,7 @@ Currently covers most of the grammatical constraints for state-machine
 definitions.  The checking of JsonPath syntax is hand-built and probably
 imperfect.
 
-The Ruby JSON parser unfortunately doesn not detect duplicate keys
+The Ruby JSON parser unfortunately does not detect duplicate keys
 in objects, so neither does statelint.
 
 ## Contributing
