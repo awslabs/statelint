@@ -25,8 +25,8 @@ A Pass State MAY have a field named "Result".
 A Fail State MUST NOT have a field named "InputPath".
 A Fail State MUST NOT have a field named "ResultPath".
 A Fail State MUST NOT have a field named "OutputPath".
-A Fail State MUST have a string field named "Cause".
-A Fail State MUST have a string field named "Error".
+A Fail State MAY have a string field named "Cause".
+A Fail State MAY have a string field named "Error".
 Each of a Task State and a Parallel State MAY have an object-array field named "Retry"; each element is a "Retrier".
 A Task State MUST have a URI field named "Resource".
 A Task State MAY have a positive-integer field named "TimeoutSeconds" whose value MUST be less than 99999999.
