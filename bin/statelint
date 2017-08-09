@@ -26,6 +26,8 @@ ARGV.each do |file|
     problems.each do |problem|
       puts " #{problem}"
     end
+
+  exit 1
   end
 end
 
