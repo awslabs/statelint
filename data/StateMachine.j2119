@@ -19,11 +19,10 @@ Each of a Succeed State and a Fail State is a "Terminal State".
 A State which is not a Terminal State or a Choice State MUST have a string field named "Next".
 A Terminal State MUST NOT have a field named "Next".
 A State MAY have a nullable-JSONPath field named "InputPath".
-A State MAY have a nullable-referencePath field named "ResultPath".
+Each of a Pass State, a Task State, a Wait State, and a Parallel State MAY have a nullable-referencePath field named "ResultPath".
 A State MAY have a nullable-JSONPath field named "OutputPath".
 A Pass State MAY have a field named "Result".
 A Fail State MUST NOT have a field named "InputPath".
-A Fail State MUST NOT have a field named "ResultPath".
 A Fail State MUST NOT have a field named "OutputPath".
 A Fail State MAY have a string field named "Cause".
 A Fail State MAY have a string field named "Error".
@@ -31,12 +30,12 @@ Each of a Task State and a Parallel State MAY have an object-array field named "
 A Task State MUST have a URI field named "Resource".
 A Task State MAY have a positive-integer field named "TimeoutSeconds" whose value MUST be less than 99999999.
 A Task State MAY have a positive-integer field named "HeartbeatSeconds" whose value MUST be less than 99999999.
-A Retrier MUST have a string-array field named "ErrorEquals".
+A Retrier MUST have a nonempty-string-array field named "ErrorEquals".
 A Retrier MAY have an positive-integer field named "IntervalSeconds".
 A Retrier MAY have a nonnegative-integer field named "MaxAttempts" whose value MUST be less than 99999999.
 A Retrier MAY have a float field named "BackoffRate" whose value MUST be greater than or equal to 1.0.
 Each of a Task State and a Parallel State MAY have an object-array field named "Catch"; each element is a "Catcher".
-A Catcher MUST have an string-array field named "ErrorEquals".
+A Catcher MUST have an nonempty-string-array field named "ErrorEquals".
 A Catcher MUST have a string field named "Next".
 A Catcher MAY have a nullable-referencePath field named "ResultPath".
 A Choice State MUST have a nonempty-object-array field named "Choices"; each element is a "Choice Rule".

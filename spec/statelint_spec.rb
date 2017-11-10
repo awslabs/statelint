@@ -26,4 +26,64 @@ describe StateMachineLint do
     expect(problems.size).to eq(0)
   end
 
+  it 'should reject empty ErrorEquals clauses' do
+    j = File.read "test/empty-error-equals-on-catch.json"
+    linter = StateMachineLint::Linter.new
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    
+    j = File.read "test/empty-error-equals-on-retry.json"
+    linter = StateMachineLint::Linter.new
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+  end
+
+  it 'should reject ResultPath except in Pass, Task, and Parallel' do
+    j = File.read "test/pass-with-resultpath.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    problems.each { |p| puts "P: #{p}" }
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/task-with-resultpath.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    problems.each { |p| puts "P: #{p}" }
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/choice-with-resultpath.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size > 0)
+
+    j = File.read "test/choice-with-resultpath.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size > 0)
+
+    j = File.read "test/wait-with-resultpath.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size > 0)
+
+    j = File.read "test/succeed-with-resultpath.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size > 0)
+
+    j = File.read "test/fail-with-resultpath.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size > 0)
+
+    j = File.read "test/parallel-with-resultpath.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    problems.each { |p| puts "P: #{p}" }
+    expect(problems.size).to eq(0)
+    
+  end
+
 end

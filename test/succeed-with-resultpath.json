@@ -1,0 +1,9 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Succeed",
+      "ResultPath": "$.foo"
+    }
+  }
+}
