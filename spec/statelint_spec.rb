@@ -32,12 +32,14 @@ describe StateMachineLint do
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
+    expect (problems[0].include?('non-empty required'))
     
     j = File.read "test/empty-error-equals-on-retry.json"
     linter = StateMachineLint::Linter.new
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
+    expect (problems[0].include?('non-empty required'))
   end
 
   it 'should reject ResultPath except in Pass, Task, and Parallel' do
@@ -56,27 +58,33 @@ describe StateMachineLint do
     j = File.read "test/choice-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
-    expect(problems.size > 0)
+    expect(problems.size).to eq(1)
+    expect (problems[0].include?('"ResultPath"'))
 
     j = File.read "test/choice-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
-    expect(problems.size > 0)
+    expect(problems.size).to eq(1)
+    expect (problems[0].include?('"ResultPath"'))
 
     j = File.read "test/wait-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
-    expect(problems.size > 0)
+    expect(problems.size).to eq(1)
+    expect (problems[0].include?('"ResultPath"'))
+
 
     j = File.read "test/succeed-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
-    expect(problems.size > 0)
+    expect(problems.size).to eq(1)
+    expect (problems[0].include?('"ResultPath"'))
 
     j = File.read "test/fail-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
-    expect(problems.size > 0)
+    expect(problems.size).to eq(1)
+    expect (problems[0].include?('"ResultPath"'))
 
     j = File.read "test/parallel-with-resultpath.json"
     linter = StateMachineLint::Linter.new
