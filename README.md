@@ -23,10 +23,6 @@ Or install it yourself as:
 statelint /path/to/statemachine.json
 ```
 
-```shell
-statelint state-machine-spec /path/to/statemachine.json
-```
-
 There are no options. If you see no output, your state machine is fine.
 
 ## To do
