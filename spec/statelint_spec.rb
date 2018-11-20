@@ -29,13 +29,11 @@ describe StateMachineLint do
   it 'should reject empty ErrorEquals clauses' do
     j = File.read "test/empty-error-equals-on-catch.json"
     linter = StateMachineLint::Linter.new
-    linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
     expect (problems[0].include?('non-empty required'))
-    
+
     j = File.read "test/empty-error-equals-on-retry.json"
-    linter = StateMachineLint::Linter.new
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
