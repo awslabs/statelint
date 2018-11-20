@@ -12,7 +12,6 @@
 # permissions and limitations under the License.
 #!/usr/bin/env ruby
 
-$:.unshift("#{File.expand_path(__dir__)}/../lib")
 require 'json'
 require 'statelint'
 
@@ -71,7 +70,6 @@ describe StateMachineLint do
     expect(problems.size).to eq(1)
     expect (problems[0].include?('"ResultPath"'))
 
-
     j = File.read "test/succeed-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
@@ -89,7 +87,5 @@ describe StateMachineLint do
     problems = linter.validate(j)
     problems.each { |p| puts "P: #{p}" }
     expect(problems.size).to eq(0)
-    
   end
-
 end
