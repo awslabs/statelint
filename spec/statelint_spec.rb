@@ -12,7 +12,7 @@
 # permissions and limitations under the License.
 #!/usr/bin/env ruby
 
-$:.unshift("#{File.expand_path(File.dirname(__FILE__))}/../lib")
+$:.unshift("#{File.expand_path(__dir__)}/../lib")
 require 'json'
 require 'statelint'
 
