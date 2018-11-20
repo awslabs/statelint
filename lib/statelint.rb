@@ -12,7 +12,6 @@
 # permissions and limitations under the License.
 #!/usr/bin/env ruby
 
-$:.unshift("#{File.expand_path(File.dirname(__FILE__))}/../lib")
 require 'j2119'
 require 'statelint/state_node'
 
