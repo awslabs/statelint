@@ -12,7 +12,6 @@
 # permissions and limitations under the License.
 #!/usr/bin/env ruby
 
-$:.unshift("#{File.expand_path(File.dirname(__FILE__))}/../lib")
 require 'json'
 require 'statelint'
 
@@ -29,13 +28,11 @@ describe StateMachineLint do
   it 'should reject empty ErrorEquals clauses' do
     j = File.read "test/empty-error-equals-on-catch.json"
     linter = StateMachineLint::Linter.new
-    linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
     expect (problems[0].include?('non-empty required'))
-    
+
     j = File.read "test/empty-error-equals-on-retry.json"
-    linter = StateMachineLint::Linter.new
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
@@ -73,7 +70,6 @@ describe StateMachineLint do
     expect(problems.size).to eq(1)
     expect (problems[0].include?('"ResultPath"'))
 
-
     j = File.read "test/succeed-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
@@ -91,7 +87,5 @@ describe StateMachineLint do
     problems = linter.validate(j)
     problems.each { |p| puts "P: #{p}" }
     expect(problems.size).to eq(0)
-    
   end
-
 end
