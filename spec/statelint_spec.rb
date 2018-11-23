@@ -32,14 +32,68 @@ describe StateMachineLint do
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
-    expect (problems[0].include?('non-empty required'))
+    expect(problems[0]).to include('non-empty required')
     
     j = File.read "test/empty-error-equals-on-retry.json"
     linter = StateMachineLint::Linter.new
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
-    expect (problems[0].include?('non-empty required'))
+    expect(problems[0]).to include('non-empty required')
+  end
+
+  it 'should reject Parameters except in Pass, Task, and Parallel' do
+    j = File.read "test/pass-with-parameters.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    problems.each { |p| puts "P: #{p}" }
+    expect(problems.size).to eq(0)
+    
+    j = File.read "test/task-with-parameters.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    problems.each { |p| puts "P: #{p}" }
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/choice-with-parameters.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('"Parameters"')
+
+    j = File.read "test/wait-with-parameters.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('"Parameters"')
+
+    j = File.read "test/succeed-with-parameters.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('"Parameters"')
+
+    j = File.read "test/fail-with-parameters.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('"Parameters"')
+
+    j = File.read "test/parallel-with-parameters.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should reject non-Path constructs in Parameter fields ending in ".$"' do
+    j = File.read "test/parameter-path-problems.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(4)
+    expect(problems[0]).to include('bad1')
+    expect(problems[1]).to include('bad2')
+    expect(problems[2]).to include('bad3')
+    expect(problems[3]).to include('bad4')
   end
 
   it 'should reject ResultPath except in Pass, Task, and Parallel' do
@@ -59,37 +113,29 @@ describe StateMachineLint do
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
-    expect (problems[0].include?('"ResultPath"'))
-
-    j = File.read "test/choice-with-resultpath.json"
-    linter = StateMachineLint::Linter.new
-    problems = linter.validate(j)
-    expect(problems.size).to eq(1)
-    expect (problems[0].include?('"ResultPath"'))
+    expect(problems[0]).to include('"ResultPath"')
 
     j = File.read "test/wait-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
-    expect (problems[0].include?('"ResultPath"'))
-
+    expect(problems[0]).to include('"ResultPath"')
 
     j = File.read "test/succeed-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
-    expect (problems[0].include?('"ResultPath"'))
+    expect(problems[0]).to include('"ResultPath"')
 
     j = File.read "test/fail-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
-    expect (problems[0].include?('"ResultPath"'))
+    expect(problems[0]).to include('"ResultPath"')
 
     j = File.read "test/parallel-with-resultpath.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
-    problems.each { |p| puts "P: #{p}" }
     expect(problems.size).to eq(0)
     
   end
