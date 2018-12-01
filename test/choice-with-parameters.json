@@ -1,0 +1,19 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Choice",
+      "Choices": [
+	{
+	  "Variable": "$.foo",
+	  "StringEquals": "x",
+	  "Next": "x"
+	}
+      ],
+      "Parameters": "I'm a parameter!"
+    },
+    "x": {
+      "Type": "Succeed"
+    }
+  }
+}

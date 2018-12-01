@@ -1,0 +1,29 @@
+{
+  "StartAt": "FNORD",
+  "States": {
+    "FNORD": {
+      "Type": "Pass",
+      "Result": { "foo": 1 },
+      "Parameters": {
+	"f0": 1,
+	"good1.$": "$.g1",
+	"bad1.$": 23,
+	"bad2.$": "23",
+	"f3": {
+	  "bad3.$": [ 1, 2, 3 ],
+	  "good2.$": "$.b[23]",
+	  "f5": [
+	    "f6",
+	    {
+	      "f7": {
+		"bad4.$": { "f9": 1 },
+		"good3.$": "$.x.y.z[2]"
+	      }
+	    }
+	  ]
+	}
+      },
+      "End": true
+    }
+  }
+}

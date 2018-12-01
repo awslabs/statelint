@@ -12,6 +12,8 @@
 # permissions and limitations under the License.
 #!/usr/bin/env ruby
 
+require 'j2119'
+
 module StateMachineLint
 
   # Semantic validation that can't be expressed in a J2119 schema
@@ -52,7 +54,13 @@ module StateMachineLint
           @current_states_incoming << []
         end
 
-        node['States'].keys.each do |name|
+        states = node['States']
+        states.keys.each do |name|
+          child = states[name]
+          if child.is_a?(Hash) && child.key?('Parameters')
+            probe_parameters(child, path + '.' + name, problems)
+          end
+
           if @all_state_names[name]
             problems <<
               "State \"#{name}\", defined at #{path}.States, " +
@@ -113,6 +121,23 @@ module StateMachineLint
       end
     end
 
+    # Search through Parameters for object nodes and check field semantics
+    def probe_parameters(node, path, problems)
+      if node.is_a?(Hash)
+        node.each do |name, val|
+          if name.end_with? '.$'
+            if (!val.is_a?(String)) || (!J2119::JSONPathChecker.is_path?(val))
+              problems << "Field \"#{name}\" of Parameters at \"#{path}\" is not a JSONPath"
+            end
+          else
+            probe_parameters(val, "#{path}.#{name}", problems)
+          end
+        end
+      elsif node.is_a?(Array)
+        node.size.times {|i| probe_parameters(node[i], "#{path}[#{i}]", problems) }
+      end
+    end
+                         
     def check_for_terminal(node, path, problems)
       if node['States'] && node['States'].is_a?(Hash)
         terminal_found = false

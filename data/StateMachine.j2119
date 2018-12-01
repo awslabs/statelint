@@ -14,6 +14,7 @@ A State whose "Type" field's value is "Wait" is a "Wait State".
 A State whose "Type" field's value is "Parallel" is a "Parallel State".
 A State MAY have a string field named "Comment".
 Each of a Pass State, a Task State, a Wait State, and a Parallel State MAY have a boolean field named "End".
+Each of a Pass State, a Task State, and a Parallel State MAY have a field named "Parameters".
 A State whose "End" field's value is true is a "Terminal State".
 Each of a Succeed State and a Fail State is a "Terminal State".
 A State which is not a Terminal State or a Choice State MUST have a string field named "Next".
