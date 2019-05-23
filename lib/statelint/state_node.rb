@@ -21,7 +21,7 @@ module StateMachineLint
   class StateNode
 
     def initialize
-      # We push States nodes on here when we traverse them.  
+      # We push States nodes on here when we traverse them.
       #  Then, whenever we find a "Next" or "Default" or "StartAt" node,
       #  we validate that the target is there, and record that that
       #  target has an incoming pointer
@@ -74,7 +74,7 @@ module StateMachineLint
       check_for_terminal(node, path, problems)
 
       check_next(node, path, problems)
-        
+
       check_States_ALL(node['Retry'], path + '.Retry', problems)
       check_States_ALL(node['Catch'], path + '.Catch', problems)
 
@@ -126,7 +126,7 @@ module StateMachineLint
       if node.is_a?(Hash)
         node.each do |name, val|
           if name.end_with? '.$'
-            if (!val.is_a?(String)) || (!J2119::JSONPathChecker.is_path?(val))
+            if (!val.is_a?(String)) || (!is_valid_parameters_path?(val))
               problems << "Field \"#{name}\" of Parameters at \"#{path}\" is not a JSONPath"
             end
           else
@@ -137,7 +137,18 @@ module StateMachineLint
         node.size.times {|i| probe_parameters(node[i], "#{path}[#{i}]", problems) }
       end
     end
-                         
+
+    # Check if a string that ends with ".$" is a valid path
+    def is_valid_parameters_path?(val)
+      # If the value begins with “$$”, the first dollar character is stripped off and the remainder MUST be a Path.
+      if val.start_with?("$$")
+        path_to_check = val.gsub(/^\$/, "")
+        J2119::JSONPathChecker.is_path?(path_to_check)
+      else
+        J2119::JSONPathChecker.is_path?(val)
+      end
+    end
+
     def check_for_terminal(node, path, problems)
       if node['States'] && node['States'].is_a?(Hash)
         terminal_found = false
@@ -156,12 +167,12 @@ module StateMachineLint
         end
       end
     end
-    
+
     def check_States_ALL(node, path, problems)
       if !node.is_a?(Array)
         return
       end
-      
+
       i = 0
       node.each do |element|
         if element.is_a?(Hash)
