@@ -83,6 +83,12 @@ describe StateMachineLint do
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(0)
+
+    j = File.read "test/map-with-parameters.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    puts problems
+    expect(problems.size).to eq(0)
   end
 
   it 'should reject non-Path constructs in Parameter fields ending in ".$"' do
