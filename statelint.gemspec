@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'statelint'
-  s.version     = '0.3.0'
+  s.version     = '0.4.1'
   s.summary     = "State Machine JSON validator"
   s.description = "Validates a JSON object representing a State Machine"
   s.authors     = ["Tim Bray"]
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.2'
 
-  s.add_runtime_dependency 'j2119', '>= 0.3.0'
+  s.add_runtime_dependency 'j2119', '~> 0.4', '>= 0.4.0'
 
   s.metadata = {
     'source_code_uri' => 'https://github.com/awslabs/statelint',
