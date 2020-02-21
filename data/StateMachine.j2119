@@ -29,7 +29,7 @@ A Fail State MUST NOT have a field named "OutputPath".
 A Fail State MAY have a string field named "Cause".
 A Fail State MAY have a string field named "Error".
 Each of a Task State, a Parallel State, and a Map State MAY have an object-array field named "Retry"; each element is a "Retrier".
-A Task State MUST have a URI field named "Resource".
+A Task State MUST have a string field named "Resource".
 A Task State MAY have a positive-integer field named "TimeoutSeconds" whose value MUST be less than 99999999.
 A Task State MAY have a positive-integer field named "HeartbeatSeconds" whose value MUST be less than 99999999.
 A Retrier MUST have a nonempty-string-array field named "ErrorEquals".
