@@ -33,6 +33,6 @@ linted_files.each do |file, problems|
   header = problem_size == 1 ? 'One error' : "#{problem_size} errors"
   puts header + ": for #{file}"
   puts " #{problems.join("\n ")}"
-en
+end
 
 exit 1
