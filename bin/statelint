@@ -17,17 +17,22 @@ require 'statelint'
 linter = StateMachineLint::Linter.new
 
 # arguments are JSON filenames
-ARGV.each do |file|
-  problems = linter.validate(ARGV[0])
+linted_files = ARGV.map { |file|
+  [file, linter.validate(file)]
+}.to_h
 
-  if !problems.empty?
-    header = (problems.size == 1) ? 'One error:' : "#{problems.size} errors:"
-    puts header
-    problems.each do |problem|
-      puts " #{problem}"
-    end
+problem_count = linted_files.values.flatten.compact.count
 
-  exit 1
-  end
-end
+exit if problem_count <= 0
 
+linted_files.each { |file, problems|
+  problem_size = problems.size
+  
+  next if problem_size <= 0
+
+  header = problem_size == 1 ? 'One error' : "#{problem_size} errors"
+  puts header + ": for #{file}"
+  puts " #{problems.join("\n ")}"
+}
+
+exit 1
