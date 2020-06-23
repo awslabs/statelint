@@ -25,14 +25,14 @@ problem_count = linted_files.values.flatten.compact.count
 
 exit if problem_count <= 0
 
-linted_files.each { |file, problems|
+linted_files.each do |file, problems|
   problem_size = problems.size
-  
+
   next if problem_size <= 0
 
   header = problem_size == 1 ? 'One error' : "#{problem_size} errors"
   puts header + ": for #{file}"
   puts " #{problems.join("\n ")}"
-}
+en
 
 exit 1
