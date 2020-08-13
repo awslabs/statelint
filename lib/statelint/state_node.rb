@@ -32,6 +32,10 @@ module StateMachineLint
       # We keep track of all the state names and complain about
       #  dupes
       @all_state_names = {}
+      @payload_builder_fields = ["Parameters", "ResultSelector"]
+      @context_object_access_fields = [{"field"=> "InputPath", "nullable"=> true}, {"field"=> "OutputPath", "nullable"=> true}, {"field"=>  "ItemsPath", "nullable"=> false}]
+      @choice_state_nested_operators = ["And", "Or", "Not"]
+      @intrinsic_invocation_regex = /^States\.(JsonToString|Format|StringToJson|Array)\(.+\)$/
     end
 
     def check(node, path, problems)
@@ -57,8 +61,17 @@ module StateMachineLint
         states = node['States']
         states.keys.each do |name|
           child = states[name]
-          if child.is_a?(Hash) && child.key?('Parameters')
-            probe_parameters(child, path + '.' + name, problems)
+          if child.is_a?(Hash)
+            child_path = path + '.' + name
+            probe_context_object_access(child, child_path, problems)
+            @payload_builder_fields.each do |field_name|
+              if child.key?(field_name)
+                probe_payload_builder(child[field_name], child_path, problems, field_name)
+              end
+            end  
+            if child.key?("Type") && child["Type"] == "Choice" && child.key?("Choices")
+              probe_choice_state(child["Choices"], child_path + '.Choices' , problems)
+            end
           end
 
           if @all_state_names[name]
@@ -121,25 +134,66 @@ module StateMachineLint
       end
     end
 
+    def probe_context_object_access(node, path, problems)
+      @context_object_access_fields.each do |field|
+        field_name = field["field"]
+        nullable = field["nullable"]
+        if node.key?(field_name)
+          if !nullable && node[field_name].nil?
+            problems << "Field \"#{field_name}\" defined at \"#{path}\" should be non-null"
+            return
+          end
+          if !node[field_name].nil? and !is_valid_parameters_path?(node[field_name])
+            problems << "Field \"#{field_name}\" defined at \"#{path}\" is not a JSONPath"
+          end
+        end
+      end
+    end
+
+    def probe_choice_state(node, path, problems)
+      if node.is_a?(Hash)
+        if node.key?("Variable") && !is_valid_parameters_path?(node["Variable"])
+          problems << "Field \"Variable\" of Choice state at \"#{path}\" is not a JSONPath"
+        end
+        @choice_state_nested_operators.each do |operator|
+          if node.key?(operator)
+            probe_choice_state(node[operator], path + '.' + operator, problems)
+          end
+        end 
+      elsif node.is_a?(Array)
+        node.size.times {|i| probe_choice_state(node[i], "#{path}[#{i}]", problems) }
+      end
+    end
+
     # Search through Parameters for object nodes and check field semantics
-    def probe_parameters(node, path, problems)
+    def probe_payload_builder(node, path, problems, field_name)
       if node.is_a?(Hash)
         node.each do |name, val|
           if name.end_with? '.$'
-            if (!val.is_a?(String)) || (!is_valid_parameters_path?(val))
-              problems << "Field \"#{name}\" of Parameters at \"#{path}\" is not a JSONPath"
+            if !is_intrinsic_invocation?(val) && !is_valid_parameters_path?(val)
+              problems << "Field \"#{name}\" of #{field_name} at \"#{path}\" is not a JSONPath or intrinsic function expression"
             end
           else
-            probe_parameters(val, "#{path}.#{name}", problems)
+            probe_payload_builder(val, "#{path}.#{name}", problems, field_name)
           end
         end
       elsif node.is_a?(Array)
-        node.size.times {|i| probe_parameters(node[i], "#{path}[#{i}]", problems) }
+        node.size.times {|i| probe_payload_builder(node[i], "#{path}[#{i}]", problems, field_name) }
       end
+    end
+
+    def is_intrinsic_invocation?(val)
+      if val.is_a?(String) && val.match?(@intrinsic_invocation_regex)
+        return true
+      end
+      return false
     end
 
     # Check if a string that ends with ".$" is a valid path
     def is_valid_parameters_path?(val)
+      if !val.is_a?(String)
+        return false
+      end
       # If the value begins with “$$”, the first dollar character is stripped off and the remainder MUST be a Path.
       if val.start_with?("$$")
         path_to_check = val.gsub(/^\$/, "")

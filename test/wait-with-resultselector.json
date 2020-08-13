@@ -1,0 +1,15 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Wait",
+      "Seconds": 1,
+      "ResultSelector": {
+        "a": "x",
+        "b.$": "$.y",
+        "c.$": "$$.z"
+      },
+      "End": true
+    }
+  }
+}

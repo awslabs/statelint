@@ -1,0 +1,14 @@
+{
+    "StartAt": "p",
+    "States": {
+      "p": {
+        "Type": "Task",
+        "Resource": "foo:bar",
+        "Parameters": {
+            "abc.$": "States.JsonToString($.xyz)"
+        },
+        "End": true
+      }
+    }
+  }
+  
