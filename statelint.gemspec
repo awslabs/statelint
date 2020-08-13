@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'statelint'
-  s.version     = '0.4.1'
+  s.version     = '0.5.0'
   s.summary     = "State Machine JSON validator"
   s.description = "Validates a JSON object representing a State Machine"
   s.authors     = ["Tim Bray"]
