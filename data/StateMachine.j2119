@@ -20,9 +20,10 @@ A State whose "End" field's value is true is a "Terminal State".
 Each of a Succeed State and a Fail State is a "Terminal State".
 A State which is not a Terminal State or a Choice State MUST have a string field named "Next".
 A Terminal State MUST NOT have a field named "Next".
-A State MAY have a nullable-JSONPath field named "InputPath".
+A State MAY have a field named "InputPath".
 Each of a Pass State, a Task State, a Parallel State, and a Map State MAY have a nullable-referencePath field named "ResultPath".
-A State MAY have a nullable-JSONPath field named "OutputPath".
+Each of a Task State, a Parallel State, and a Map State MAY have a field named "ResultSelector".
+A State MAY have a field named "OutputPath".
 A Pass State MAY have a field named "Result".
 A Fail State MUST NOT have a field named "InputPath".
 A Fail State MUST NOT have a field named "OutputPath".
@@ -32,6 +33,10 @@ Each of a Task State, a Parallel State, and a Map State MAY have an object-array
 A Task State MUST have a URI field named "Resource".
 A Task State MAY have a positive-integer field named "TimeoutSeconds" whose value MUST be less than 99999999.
 A Task State MAY have a positive-integer field named "HeartbeatSeconds" whose value MUST be less than 99999999.
+A Task State MAY have a referencePath field named "TimeoutSecondsPath".
+A Task State MAY have a referencePath field named "HeartbeatSecondsPath".
+A Task State MAY have only one of "TimeoutSeconds" and "TimeoutSecondsPath".
+A Task State MAY have only one of "HeartbeatSeconds" and "HeartbeatSecondsPath".
 A Retrier MUST have a nonempty-string-array field named "ErrorEquals".
 A Retrier MAY have an positive-integer field named "IntervalSeconds".
 A Retrier MAY have a nonnegative-integer field named "MaxAttempts" whose value MUST be less than 99999999.
@@ -51,9 +56,9 @@ A Choice Rule MUST have a string field named "Next".
 A Choice Rule with an "And" field is a "Boolean".
 A Choice Rule with an "Or" field is a "Boolean".
 A Choice Rule with a "Not" field is a "Boolean".
-A Choice Rule MAY have a referencePath field named "Variable".
+A Choice Rule MAY have a field named "Variable".
 A Choice Rule with a "Variable" field is a "Comparison".
-A Comparison MUST have a field named one of "StringEquals", "StringLessThan", "StringGreaterThan", "StringLessThanEquals", "StringGreaterThanEquals", "NumericEquals", "NumericLessThan", "NumericGreaterThan", "NumericLessThanEquals", "NumericGreaterThanEquals", "BooleanEquals", "TimestampEquals", "TimestampLessThan", "TimestampGreaterThan", "TimestampLessThanEquals", or "TimestampGreaterThanEquals".
+A Comparison MUST have a field named one of "StringEquals", "StringLessThan", "StringGreaterThan", "StringLessThanEquals", "StringGreaterThanEquals", "NumericEquals", "NumericLessThan", "NumericGreaterThan", "NumericLessThanEquals", "NumericGreaterThanEquals", "BooleanEquals", "TimestampEquals", "TimestampLessThan", "TimestampGreaterThan", "TimestampLessThanEquals", "TimestampGreaterThanEquals", "StringEqualsPath", "StringLessThanPath", "StringGreaterThanPath", "StringLessThanEqualsPath", "StringGreaterThanEqualsPath", "NumericEqualsPath", "NumericLessThanPath", "NumericGreaterThanPath", "NumericLessThanEqualsPath", "NumericGreaterThanEqualsPath", "BooleanEqualsPath", "TimestampEqualsPath", "TimestampLessThanPath", "TimestampGreaterThanPath", "TimestampLessThanEqualsPath", "TimestampGreaterThanEqualsPath", "IsNull", "IsPresent", "IsNumeric", "IsString", "IsBoolean", "IsTimestamp", or "StringMatches".
 A Comparison MAY have a string field named "StringEquals".
 A Comparison MAY have a string field named "StringLessThan".
 A Comparison MAY have a string field named "StringGreaterThan".
@@ -70,6 +75,29 @@ A Comparison MAY have a timestamp field named "TimestampLessThan".
 A Comparison MAY have a timestamp field named "TimestampGreaterThan".
 A Comparison MAY have a timestamp field named "TimestampLessThanEquals".
 A Comparison MAY have a timestamp field named "TimestampGreaterThanEquals".
+A Comparison MAY have a boolean field named "IsNull".
+A Comparison MAY have a boolean field named "IsPresent".
+A Comparison MAY have a boolean field named "IsNumeric".
+A Comparison MAY have a boolean field named "IsString".
+A Comparison MAY have a boolean field named "IsBoolean".
+A Comparison MAY have a boolean field named "IsTimestamp".
+A Comparison MAY have a string field named "StringMatches".
+A Comparison MAY have a referencePath field named "StringEqualsPath".
+A Comparison MAY have a referencePath field named "StringLessThanPath".
+A Comparison MAY have a referencePath field named "StringGreaterThanPath".
+A Comparison MAY have a referencePath field named "StringLessThanEqualsPath".
+A Comparison MAY have a referencePath field named "StringGreaterThanEqualsPath".
+A Comparison MAY have a referencePath field named "NumericEqualsPath".
+A Comparison MAY have a referencePath field named "NumericLessThanPath".
+A Comparison MAY have a referencePath field named "NumericGreaterThanPath".
+A Comparison MAY have a referencePath field named "NumericLessThanEqualsPath".
+A Comparison MAY have a referencePath field named "NumericGreaterThanEqualsPath".
+A Comparison MAY have a referencePath field named "BooleanEqualsPath".
+A Comparison MAY have a referencePath field named "TimestampEqualsPath".
+A Comparison MAY have a referencePath field named "TimestampLessThanPath".
+A Comparison MAY have a referencePath field named "TimestampGreaterThanPath".
+A Comparison MAY have a referencePath field named "TimestampLessThanEqualsPath".
+A Comparison MAY have a referencePath field named "TimestampGreaterThanEqualsPath".
 A Comparison MUST NOT have a field named "And".
 A Comparison MUST NOT have a field named "Or".
 A Comparison MUST NOT have a field named "Not".
@@ -80,7 +108,7 @@ A Nested Rule with an "And" field is a "Nested Boolean".
 A Nested Rule with an "Or" field is a "Nested Boolean".
 A Nested Rule with a "Not" field is a "Nested Boolean".
 A Nested Rule MUST NOT have a field named "Next".
-A Nested Rule MAY have a referencePath field named "Variable".
+A Nested Rule MAY have a field named "Variable".
 A Nested Rule with a "Variable" field is a "Nested Comparison".
 A Nested Comparison MAY have a string field named "StringEquals".
 A Nested Comparison MAY have a string field named "StringLessThan".
@@ -98,6 +126,29 @@ A Nested Comparison MAY have a timestamp field named "TimestampLessThan".
 A Nested Comparison MAY have a timestamp field named "TimestampGreaterThan".
 A Nested Comparison MAY have a timestamp field named "TimestampLessThanEquals".
 A Nested Comparison MAY have a timestamp field named "TimestampGreaterThanEquals".
+A Nested Comparison MAY have a boolean field named "IsNull".
+A Nested Comparison MAY have a boolean field named "IsPresent".
+A Nested Comparison MAY have a boolean field named "IsNumeric".
+A Nested Comparison MAY have a boolean field named "IsString".
+A Nested Comparison MAY have a boolean field named "IsBoolean".
+A Nested Comparison MAY have a boolean field named "IsTimestamp".
+A Nested Comparison MAY have a string field named "StringMatches".
+A Nested Comparison MAY have a referencePath field named "StringEqualsPath".
+A Nested Comparison MAY have a referencePath field named "StringLessThanPath".
+A Nested Comparison MAY have a referencePath field named "StringGreaterThanPath".
+A Nested Comparison MAY have a referencePath field named "StringLessThanEqualsPath".
+A Nested Comparison MAY have a referencePath field named "StringGreaterThanEqualsPath".
+A Nested Comparison MAY have a referencePath field named "NumericEqualsPath".
+A Nested Comparison MAY have a referencePath field named "NumericLessThanPath".
+A Nested Comparison MAY have a referencePath field named "NumericGreaterThanPath".
+A Nested Comparison MAY have a referencePath field named "NumericLessThanEqualsPath".
+A Nested Comparison MAY have a referencePath field named "NumericGreaterThanEqualsPath".
+A Nested Comparison MAY have a referencePath field named "BooleanEqualsPath".
+A Nested Comparison MAY have a referencePath field named "TimestampEqualsPath".
+A Nested Comparison MAY have a referencePath field named "TimestampLessThanPath".
+A Nested Comparison MAY have a referencePath field named "TimestampGreaterThanPath".
+A Nested Comparison MAY have a referencePath field named "TimestampLessThanEqualsPath".
+A Nested Comparison MAY have a referencePath field named "TimestampGreaterThanEqualsPath".
 A Nested Comparison MUST NOT have a field named "And".
 A Nested Comparison MUST NOT have a field named "Or".
 A Nested Comparison MUST NOT have a field named "Not".
@@ -109,7 +160,7 @@ A Wait State MUST have only one of "Seconds", "SecondsPath", "Timestamp", and "T
 A Wait State MUST have a field named one of "Seconds", "SecondsPath", "Timestamp", or "TimestampPath".
 A Parallel State MUST have an object-array field named "Branches"; each element is a "Branch".
 A Map State MUST have an object field named "Iterator"; its value is a "Branch".
-A Map State MAY have a referencePath field named "ItemsPath".
+A Map State MAY have a field named "ItemsPath".
 A Map State MAY have a numeric field named "MaxConcurrency".
 A Branch MUST have an object field named "States"; each field is a "State".
 A Branch MUST have a string field named "StartAt".

@@ -1,0 +1,15 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Pass",
+      "Result": { "foo": 1 },
+      "ResultSelector": {
+        "a": "$.foo",
+        "b.$": "$.y",
+        "c.$": "$$.z"
+      },
+      "End": true
+    }
+  }
+}
