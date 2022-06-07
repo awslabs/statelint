@@ -45,6 +45,7 @@ Each of a Task State, a Parallel State, and a Map State MAY have an object-array
 A Catcher MUST have an nonempty-string-array field named "ErrorEquals".
 A Catcher MUST have a string field named "Next".
 A Catcher MAY have a nullable-referencePath field named "ResultPath".
+A Catcher MAY have a string field named "Comment".
 A Choice State MUST have a nonempty-object-array field named "Choices"; each element is a "Choice Rule".
 A Choice State MUST NOT have a field named "Next".
 A Choice State MUST NOT have a field named "End".
