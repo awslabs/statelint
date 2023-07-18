@@ -1,0 +1,13 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Task",
+      "Resource": "foo:bar",
+      "ResultSelector": {
+        "array.$": "States.StringSplit($.inputString, $.splitter)"
+      },
+      "End": true
+    }
+  }
+}

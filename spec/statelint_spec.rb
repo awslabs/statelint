@@ -293,4 +293,41 @@ describe StateMachineLint do
     expect(problems.size).to eq(1)
     expect(problems[0]).to include('may have only one of ["HeartbeatSeconds", "HeartbeatSecondsPath"]')
   end
+
+  it 'should allow valid new intrinsic function invocations that were added in 2022' do
+    j = File.read "test/states-array-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-encoding-decoding-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-hash-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-json-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-math-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-string-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-uuid-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
 end

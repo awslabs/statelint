@@ -1,0 +1,19 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Task",
+      "Resource": "foo:bar",
+      "ResultSelector": {
+        "array.$": "States.Array('Foo', $.xyz, 'Bar', 2.3)",
+        "partition.$": "States.ArrayPartition($.inputArray, 4)",
+        "contains.$": "States.ArrayContains($.inputArray, $.lookingFor)",
+        "range.$": "States.ArrayRange(1, 9, 2)",
+        "item.$": "States.ArrayGetItem($.inputArray, $.index)",
+        "length.$": "States.ArrayLength($.inputArray)",
+        "unique.$": "States.ArrayUnique($.inputArray)"
+      },
+      "End": true
+    }
+  }
+}
