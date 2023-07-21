@@ -1,0 +1,13 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Task",
+      "Resource": "foo:bar",
+      "ResultSelector": {
+        "output.$": "States.Hash($.Data, $.Algorithm)"
+      },
+      "End": true
+    }
+  }
+}

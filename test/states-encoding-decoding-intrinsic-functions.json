@@ -1,0 +1,14 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Task",
+      "Resource": "foo:bar",
+      "ResultSelector": {
+        "base64.$": "States.Base64Encode($.input)",
+        "data.$": "States.Base64Decode($.base64)"
+      },
+      "End": true
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Task",
+      "Resource": "foo:bar",
+      "ResultSelector": {
+        "random.$": "States.MathRandom($.start, $.end)",
+        "addition.$": "States.MathAdd($.value1, $.step)"
+      },
+      "End": true
+    }
+  }
+}
