@@ -1,0 +1,17 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Task",
+      "Resource": "foo:bar",
+      "End": true,
+      "Retry": [
+        {
+          "ErrorEquals": ["States.Timeout"],
+          "MaxDelaySeconds": 5,
+          "JitterStrategy": "FULL"
+        }
+      ]
+    }
+  }
+}
