@@ -28,9 +28,11 @@ A Pass State MAY have a field named "Result".
 A Fail State MUST NOT have a field named "InputPath".
 A Fail State MUST NOT have a field named "OutputPath".
 A Fail State MAY have a string field named "Cause".
-A Fail State MAY have a referencePath field named "CausePath".
+A Fail State MAY have a field named "CausePath".
+A Fail State MAY have only one of "Cause" and "CausePath".
 A Fail State MAY have a string field named "Error".
-A Fail State MAY have a referencePath field named "ErrorPath".
+A Fail State MAY have a field named "ErrorPath".
+A Fail State MAY have only one of "Error" and "ErrorPath".
 Each of a Task State, a Parallel State, and a Map State MAY have an object-array field named "Retry"; each element is a "Retrier".
 A Task State MUST have a URI field named "Resource".
 A Task State MAY have a positive-integer field named "TimeoutSeconds" whose value MUST be less than 99999999.
@@ -43,7 +45,7 @@ A Retrier MUST have a nonempty-string-array field named "ErrorEquals".
 A Retrier MAY have an positive-integer field named "IntervalSeconds".
 A Retrier MAY have a nonnegative-integer field named "MaxAttempts" whose value MUST be less than 99999999.
 A Retrier MAY have a float field named "BackoffRate" whose value MUST be greater than or equal to 1.0.
-A Retrier MAY have an positive-integer field named "MaxDelaySeconds".
+A Retrier MAY have a positive-integer field named "MaxDelaySeconds".
 A Retrier MAY have a string field named "JitterStrategy" whose value MUST be one of "FULL" or "NONE".
 Each of a Task State, a Parallel State, and a Map State MAY have an object-array field named "Catch"; each element is a "Catcher".
 A Catcher MUST have an nonempty-string-array field named "ErrorEquals".

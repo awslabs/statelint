@@ -33,6 +33,28 @@ describe StateMachineLint do
     expect(problems.size).to eq(0)
   end
 
+  it 'should allow Fail states to use ErrorPath and CausePath fields with intrinsic functions' do
+    j = File.read "test/fail-with-error-and-cause-path-using-intrinsic-functions.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should reject Fail state with both static and dynamic error/cause' do
+    j = File.read "test/fail-with-static-and-dynamic-error.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('may have only one of ["Error", "ErrorPath"]')
+
+    j = File.read "test/fail-with-static-and-dynamic-cause.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('may have only one of ["Cause", "CausePath"]')
+  end
+
   it 'should allow Retry to use MaxDelaySeconds and JitterStrategy' do
     j = File.read "test/backoff-with-jitter-on-retry.json"
     j = JSON.parse j
