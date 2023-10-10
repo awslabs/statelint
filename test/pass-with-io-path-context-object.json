@@ -1,0 +1,13 @@
+{
+    "StartAt": "p",
+    "States": {
+      "p": {
+        "Type": "Pass",
+        "Result": { "foo": 1 , "bar": 2},
+        "InputPath": "$$.path.inputToProcess",
+        "OutputPath": "$$.outputToPass", 
+        "End": true
+      }
+    }
+  }
+  

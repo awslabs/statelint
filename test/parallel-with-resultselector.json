@@ -1,0 +1,25 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Parallel",
+      "Branches": [
+	{
+	  "StartAt": "x",
+	  "States": {
+	    "x": {
+	      "Type": "Succeed"
+	    }
+	  }
+	}
+      ],
+      "Parameters": "$.foo",
+      "ResultSelector": {
+        "a": "x",
+        "b.$": "$.y",
+        "c.$": "$$.z"
+      },
+      "End": true
+    }
+  }
+}

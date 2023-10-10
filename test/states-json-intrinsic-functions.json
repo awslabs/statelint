@@ -1,0 +1,15 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Task",
+      "Resource": "foo:bar",
+      "ResultSelector": {
+        "output.$": "States.JsonMerge($.json1, $.json2, false)",
+        "json.$": "States.StringToJson($.escapedJsonString)",
+        "string.$": "States.JsonToString($.unescapedJson)"
+      },
+      "End": true
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Task",
+      "Resource": "foo:bar",
+      "ResultSelector": {
+          "abc.$": " States.Array('Foo', $.xyz, 'Bar', 2.3)"
+      },
+      "End": true
+    }
+  }
+}
