@@ -386,4 +386,12 @@ describe StateMachineLint do
     problems = linter.validate(j)
     expect(problems.size).to eq(0)
   end
+
+  it 'should allow Choice Rule to use Comment' do
+    j = File.read "test/choice-rule-with-comment.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
 end
