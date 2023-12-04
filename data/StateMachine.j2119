@@ -64,6 +64,7 @@ A Choice Rule with an "Or" field is a "Boolean".
 A Choice Rule with a "Not" field is a "Boolean".
 A Choice Rule MAY have a field named "Variable".
 A Choice Rule with a "Variable" field is a "Comparison".
+A Choice Rule MAY have a string field named "Comment".
 A Comparison MUST have a field named one of "StringEquals", "StringLessThan", "StringGreaterThan", "StringLessThanEquals", "StringGreaterThanEquals", "NumericEquals", "NumericLessThan", "NumericGreaterThan", "NumericLessThanEquals", "NumericGreaterThanEquals", "BooleanEquals", "TimestampEquals", "TimestampLessThan", "TimestampGreaterThan", "TimestampLessThanEquals", "TimestampGreaterThanEquals", "StringEqualsPath", "StringLessThanPath", "StringGreaterThanPath", "StringLessThanEqualsPath", "StringGreaterThanEqualsPath", "NumericEqualsPath", "NumericLessThanPath", "NumericGreaterThanPath", "NumericLessThanEqualsPath", "NumericGreaterThanEqualsPath", "BooleanEqualsPath", "TimestampEqualsPath", "TimestampLessThanPath", "TimestampGreaterThanPath", "TimestampLessThanEqualsPath", "TimestampGreaterThanEqualsPath", "IsNull", "IsPresent", "IsNumeric", "IsString", "IsBoolean", "IsTimestamp", or "StringMatches".
 A Comparison MAY have a string field named "StringEquals".
 A Comparison MAY have a string field named "StringLessThan".
