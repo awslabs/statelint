@@ -36,3 +36,10 @@ in objects, so neither does statelint.
 
 Bug reports and pull requests are welcome on GitHub 
 
+### Testing
+
+All changes should be covered by unit tests in the `spec` directory. To run tests, execute the following from the package root:
+
+```
+bundle exec rspec
+```
