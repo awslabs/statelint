@@ -172,3 +172,4 @@ A Map State MAY have a numeric field named "MaxConcurrency".
 A Branch MUST have an object field named "States"; each field is a "State".
 A Branch MUST have a string field named "StartAt".
 A Branch MAY have a string field named "Comment".
+A Catcher MAY have a string field named "Comment".

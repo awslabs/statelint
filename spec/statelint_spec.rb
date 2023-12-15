@@ -213,7 +213,7 @@ describe StateMachineLint do
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(0)
-  end 
+  end
 
   it 'should allow context object access in Map state ItemsPath' do
     j = File.read "test/map-with-itemspath-context-object.json"
@@ -221,7 +221,7 @@ describe StateMachineLint do
     problems = linter.validate(j)
     expect(problems.size).to eq(0)
   end
-    
+
   it 'should allow dynamic timeout fields in Task state' do
     j = File.read "test/task-with-dynamic-timeouts.json"
     linter = StateMachineLint::Linter.new
@@ -390,6 +390,13 @@ describe StateMachineLint do
   it 'should allow Choice Rule to use Comment' do
     j = File.read "test/choice-rule-with-comment.json"
     j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should allow a Comment field in Catcher' do
+    j = File.read "test/succeed-with-comment-in-catcher.json"
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(0)

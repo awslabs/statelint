@@ -1,0 +1,23 @@
+{
+  "Comment": "test",
+  "StartAt": "foo",
+  "States": {
+    "foo": {
+      "Type":"Task",
+      "Resource":"arn:aws:states:::lambda:invoke",
+      "Next": "end",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Comment": "foo",
+          "Next": "end"
+        }
+      ]
+    },
+    "end": {
+      "Type": "Fail"
+    }
+  }
+}
