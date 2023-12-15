@@ -35,7 +35,8 @@ module StateMachineLint
       @payload_builder_fields = ["Parameters", "ResultSelector"]
       @context_object_access_fields = [{"field"=> "InputPath", "nullable"=> true}, {"field"=> "OutputPath", "nullable"=> true}, {"field"=>  "ItemsPath", "nullable"=> false}]
       @choice_state_nested_operators = ["And", "Or", "Not"]
-      @intrinsic_invocation_regex = /^States\.(JsonToString|Format|StringToJson|Array)\(.+\)$/
+      @intrinsic_invocation_regex = /^States\.(Format|Array|ArrayPartition|ArrayContains|ArrayRange|ArrayGetItem|ArrayLength|ArrayUnique|Base64Encode|Base64Decode|Hash|JsonMerge|JsonToString|StringToJson|MathRandom|MathAdd|StringSplit)\(.+\)$/
+      @intrinsic_uuid_invocation_regex = /^States\.UUID\(\)$/
     end
 
     def check(node, path, problems)
@@ -183,7 +184,7 @@ module StateMachineLint
     end
 
     def is_intrinsic_invocation?(val)
-      if val.is_a?(String) && val.match?(@intrinsic_invocation_regex)
+      if val.is_a?(String) && (val.match?(@intrinsic_invocation_regex) || val.match?(@intrinsic_uuid_invocation_regex))
         return true
       end
       return false

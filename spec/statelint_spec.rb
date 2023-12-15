@@ -25,6 +25,62 @@ describe StateMachineLint do
     expect(problems.size).to eq(0)
   end
 
+  it 'should allow Fail states to use ErrorPath and CausePath fields' do
+    j = File.read "test/fail-with-error-and-cause-path.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should allow Fail states to use ErrorPath and CausePath fields with intrinsic functions' do
+    j = File.read "test/fail-with-error-and-cause-path-using-intrinsic-functions.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should reject Fail state with both static and dynamic error/cause' do
+    j = File.read "test/fail-with-static-and-dynamic-error.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('may have only one of ["Error", "ErrorPath"]')
+
+    j = File.read "test/fail-with-static-and-dynamic-cause.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('may have only one of ["Cause", "CausePath"]')
+  end
+
+  it 'should allow Retry to use MaxDelaySeconds and JitterStrategy' do
+    j = File.read "test/backoff-with-jitter-on-retry.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should reject invalid JitterStrategy' do
+    j = File.read "test/backoff-with-invalid-jitter-on-retry.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('not one of the allowed values ["FULL", "NONE"]')
+  end
+
+  it 'should reject invalid MaxDelaySeconds' do
+    j = File.read "test/invalid-backoff-with-jitter-on-retry.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('allowed floor is 0')
+  end
+
   it 'should reject empty ErrorEquals clauses' do
     j = File.read "test/empty-error-equals-on-catch.json"
     linter = StateMachineLint::Linter.new
@@ -157,7 +213,7 @@ describe StateMachineLint do
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(0)
-  end
+  end 
 
   it 'should allow context object access in Map state ItemsPath' do
     j = File.read "test/map-with-itemspath-context-object.json"
@@ -165,7 +221,7 @@ describe StateMachineLint do
     problems = linter.validate(j)
     expect(problems.size).to eq(0)
   end
-
+    
   it 'should allow dynamic timeout fields in Task state' do
     j = File.read "test/task-with-dynamic-timeouts.json"
     linter = StateMachineLint::Linter.new
@@ -294,8 +350,46 @@ describe StateMachineLint do
     expect(problems[0]).to include('may have only one of ["HeartbeatSeconds", "HeartbeatSecondsPath"]')
   end
 
-  it 'should allow a Comment field in Catcher' do
-    j = File.read "test/succeed-with-comment-in-catcher.json"
+  it 'should allow valid new intrinsic function invocations that were added in 2022' do
+    j = File.read "test/states-array-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-encoding-decoding-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-hash-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-json-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-math-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-string-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+
+    j = File.read "test/states-uuid-intrinsic-functions.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should allow Choice Rule to use Comment' do
+    j = File.read "test/choice-rule-with-comment.json"
+    j = JSON.parse j
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(0)
