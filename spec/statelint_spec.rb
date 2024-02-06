@@ -409,8 +409,15 @@ describe StateMachineLint do
     expect(problems.size).to eq(0)
   end
 
-  it 'should require ItemProcessor xor Iterator in Map' do
+  it 'should reject Map state with both Iterator and ItemProcessor' do
     j = File.read("test/map-with-itemprocessor-and-iterator.json")
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+  end
+
+  it 'should reject Map state with both Parameters and ItemSelector' do
+    j = File.read("test/map-with-parameters-and-itemselector.json")
     linter = StateMachineLint::Linter.new
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
