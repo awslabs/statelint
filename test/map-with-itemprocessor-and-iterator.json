@@ -3,7 +3,7 @@
   "States": {
     "m": {
       "Type": "Map",
-      "ItemProcessor":	{
+      "ItemProcessor": {
         "ProcessorConfig": {
           "Mode": "INLINE"
         },
