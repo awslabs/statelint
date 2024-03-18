@@ -41,6 +41,7 @@ A Task State MAY have a referencePath field named "TimeoutSecondsPath".
 A Task State MAY have a referencePath field named "HeartbeatSecondsPath".
 A Task State MAY have only one of "TimeoutSeconds" and "TimeoutSecondsPath".
 A Task State MAY have only one of "HeartbeatSeconds" and "HeartbeatSecondsPath".
+A Task State MAY have an object field named "Credentials".
 A Retrier MUST have a nonempty-string-array field named "ErrorEquals".
 A Retrier MAY have an positive-integer field named "IntervalSeconds".
 A Retrier MAY have a nonnegative-integer field named "MaxAttempts" whose value MUST be less than 99999999.

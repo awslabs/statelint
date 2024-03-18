@@ -422,4 +422,18 @@ describe StateMachineLint do
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
   end
+
+  it 'should allow Credentials in Task' do
+    j = File.read "test/task-with-credentials.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should reject invalid Credentials in Task' do
+    j = File.read "test/task-with-invalid-credentials.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+  end
 end
