@@ -1,0 +1,30 @@
+{
+  "StartAt": "m",
+  "States": {
+    "m": {
+      "Type": "Map",
+      "ItemProcessor": {
+        "ProcessorConfig": {
+          "Mode": "INLINE"
+        },
+        "StartAt": "y",
+        "States": {
+          "y": {
+            "Type": "Pass",
+            "End": true
+          }
+        }
+      },
+      "Iterator":	{
+        "StartAt": "x",
+        "States": {
+          "x": {
+            "Type": "Pass",
+            "End": true
+          }
+        }
+      },
+      "End": true
+    }
+  }
+}

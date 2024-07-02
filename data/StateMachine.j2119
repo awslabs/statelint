@@ -41,6 +41,7 @@ A Task State MAY have a referencePath field named "TimeoutSecondsPath".
 A Task State MAY have a referencePath field named "HeartbeatSecondsPath".
 A Task State MAY have only one of "TimeoutSeconds" and "TimeoutSecondsPath".
 A Task State MAY have only one of "HeartbeatSeconds" and "HeartbeatSecondsPath".
+A Task State MAY have an object field named "Credentials".
 A Retrier MUST have a nonempty-string-array field named "ErrorEquals".
 A Retrier MAY have an positive-integer field named "IntervalSeconds".
 A Retrier MAY have a nonnegative-integer field named "MaxAttempts" whose value MUST be less than 99999999.
@@ -64,6 +65,7 @@ A Choice Rule with an "Or" field is a "Boolean".
 A Choice Rule with a "Not" field is a "Boolean".
 A Choice Rule MAY have a field named "Variable".
 A Choice Rule with a "Variable" field is a "Comparison".
+A Choice Rule MAY have a string field named "Comment".
 A Comparison MUST have a field named one of "StringEquals", "StringLessThan", "StringGreaterThan", "StringLessThanEquals", "StringGreaterThanEquals", "NumericEquals", "NumericLessThan", "NumericGreaterThan", "NumericLessThanEquals", "NumericGreaterThanEquals", "BooleanEquals", "TimestampEquals", "TimestampLessThan", "TimestampGreaterThan", "TimestampLessThanEquals", "TimestampGreaterThanEquals", "StringEqualsPath", "StringLessThanPath", "StringGreaterThanPath", "StringLessThanEqualsPath", "StringGreaterThanEqualsPath", "NumericEqualsPath", "NumericLessThanPath", "NumericGreaterThanPath", "NumericLessThanEqualsPath", "NumericGreaterThanEqualsPath", "BooleanEqualsPath", "TimestampEqualsPath", "TimestampLessThanPath", "TimestampGreaterThanPath", "TimestampLessThanEqualsPath", "TimestampGreaterThanEqualsPath", "IsNull", "IsPresent", "IsNumeric", "IsString", "IsBoolean", "IsTimestamp", or "StringMatches".
 A Comparison MAY have a string field named "StringEquals".
 A Comparison MAY have a string field named "StringLessThan".
@@ -165,9 +167,18 @@ A Wait State MAY have a referencePath field named "TimestampPath".
 A Wait State MUST have only one of "Seconds", "SecondsPath", "Timestamp", and "TimestampPath".
 A Wait State MUST have a field named one of "Seconds", "SecondsPath", "Timestamp", or "TimestampPath".
 A Parallel State MUST have an object-array field named "Branches"; each element is a "Branch".
-A Map State MUST have an object field named "Iterator"; its value is a "Branch".
+A Map State MAY have an object field named "Iterator"; its value is a "ItemProcessor".
+A Map State MAY have an object field named "ItemProcessor"; its value is a "ItemProcessor".
+A Map State MUST have only one of "Iterator" and "ItemProcessor".
 A Map State MAY have a field named "ItemsPath".
+A Map State MAY have an object field named "ItemSelector".
+A Map State MAY have only one of "ItemSelector" and "Parameters".
 A Map State MAY have a numeric field named "MaxConcurrency".
 A Branch MUST have an object field named "States"; each field is a "State".
 A Branch MUST have a string field named "StartAt".
 A Branch MAY have a string field named "Comment".
+A Catcher MAY have a string field named "Comment".
+A ItemProcessor MAY have an object field named "ProcessorConfig".
+A ItemProcessor MAY have a string field named "Comment".
+A ItemProcessor MUST have a string field named "StartAt".
+A ItemProcessor MUST have an object field named "States"; each field is a "State".

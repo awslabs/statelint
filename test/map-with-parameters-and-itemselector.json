@@ -1,0 +1,27 @@
+{
+    "StartAt": "m",
+    "States": {
+      "m": {
+        "Type": "Map",
+        "Parameters": {
+          "foo.$": "$.bar"
+        },
+        "ItemSelector": {
+          "foo.$": "$.bar"
+        },
+        "ItemProcessor": {
+          "ProcessorConfig": {
+            "Mode": "INLINE"
+          },
+          "StartAt": "x",
+          "States": {
+            "x": {
+              "Type": "Pass",
+              "End": true
+            }
+          }
+        },
+        "End": true
+      }
+    }
+  }
