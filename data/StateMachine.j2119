@@ -117,6 +117,7 @@ A Nested Rule with an "Or" field is a "Nested Boolean".
 A Nested Rule with a "Not" field is a "Nested Boolean".
 A Nested Rule MUST NOT have a field named "Next".
 A Nested Rule MAY have a field named "Variable".
+A Nested Rule MAY have a string field named "Comment".
 A Nested Rule with a "Variable" field is a "Nested Comparison".
 A Nested Comparison MAY have a string field named "StringEquals".
 A Nested Comparison MAY have a string field named "StringLessThan".

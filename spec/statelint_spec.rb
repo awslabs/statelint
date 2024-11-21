@@ -436,4 +436,11 @@ describe StateMachineLint do
     problems = linter.validate(j)
     expect(problems.size).to eq(1)
   end
+
+  it 'should allow Comment in Nested Choice Rules' do
+    j = File.read "test/choice-nested-comment.json"
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
 end

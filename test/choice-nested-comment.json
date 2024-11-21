@@ -1,0 +1,65 @@
+{
+  "Comment": "A workflow definition with Comment fields at multiple levels in a Choice state",
+  "StartAt": "Choice",
+  "States": {
+    "Choice": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.a",
+          "IsPresent": true,
+          "Next": "Choice-Nested",
+          "Comment": "my comment"
+        }
+      ],
+      "Default": "Decision3"
+    },
+    "Choice-Nested": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "And": [
+            {
+              "Variable": "$.b",
+              "IsPresent": true,
+              "Comment": "nested comment"
+            },
+            {
+              "Variable": "$.c",
+              "IsPresent": true
+            },
+            {
+              "Or": [
+                {
+                  "Variable": "$.d",
+                  "IsPresent": true,
+                  "Comment": "nested comment"
+                },
+                {
+                  "Variable": "$.e",
+                  "IsPresent": true
+                }
+              ],
+              "Comment": "nested comment in Or"
+            }
+          ],
+          "Comment": "nested choice",
+          "Next": "Decision1"
+        }
+      ],
+      "Default": "Decision2"
+    },
+    "Decision1": {
+      "Type": "Pass",
+      "End": true
+    },
+    "Decision2": {
+      "Type": "Pass",
+      "End": true
+    },
+    "Decision3": {
+      "Type": "Pass",
+      "End": true
+    }
+  }
+}
