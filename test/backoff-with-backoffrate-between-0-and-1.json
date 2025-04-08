@@ -1,0 +1,16 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Task",
+      "Resource": "foo:bar",
+      "End": true,
+      "Retry": [
+        {
+          "ErrorEquals": ["States.Timeout"],
+          "BackoffRate": 0.3
+        }
+      ]
+    }
+  }
+}

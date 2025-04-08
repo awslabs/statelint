@@ -45,7 +45,7 @@ A Task State MAY have an object field named "Credentials".
 A Retrier MUST have a nonempty-string-array field named "ErrorEquals".
 A Retrier MAY have an positive-integer field named "IntervalSeconds".
 A Retrier MAY have a nonnegative-integer field named "MaxAttempts" whose value MUST be less than 99999999.
-A Retrier MAY have a float field named "BackoffRate" whose value MUST be greater than or equal to 1.0.
+A Retrier MAY have a numeric field named "BackoffRate" whose value MUST be greater than or equal to 1.
 A Retrier MAY have a positive-integer field named "MaxDelaySeconds".
 A Retrier MAY have a string field named "JitterStrategy" whose value MUST be one of "FULL" or "NONE".
 Each of a Task State, a Parallel State, and a Map State MAY have an object-array field named "Catch"; each element is a "Catcher".
