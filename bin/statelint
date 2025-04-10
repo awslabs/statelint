@@ -16,18 +16,16 @@ require 'statelint'
 
 linter = StateMachineLint::Linter.new
 
-# arguments are JSON filenames
-ARGV.each do |file|
-  problems = linter.validate(ARGV[0])
+# arguments are JSON filenames or STDIN
+problems = linter.validate(ARGF.file)
 
-  if !problems.empty?
-    header = (problems.size == 1) ? 'One error:' : "#{problems.size} errors:"
-    puts header
-    problems.each do |problem|
-      puts " #{problem}"
-    end
-
-  exit 1
+if !problems.empty?
+  header = (problems.size == 1) ? 'One error:' : "#{problems.size} errors:"
+  puts header
+  problems.each do |problem|
+    puts " #{problem}"
   end
+
+exit 1
 end
 
