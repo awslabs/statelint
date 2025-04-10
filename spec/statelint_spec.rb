@@ -81,6 +81,40 @@ describe StateMachineLint do
     expect(problems[0]).to include('allowed floor is 0')
   end
 
+  it 'should allow BackOffRate integer' do
+    j = File.read "test/backoff-with-backoffrate-integer.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should allow BackOffRate decimal' do
+    j = File.read "test/backoff-with-backoffrate-decimal.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
+  it 'should reject BackOffRate negative' do
+    j = File.read "test/backoff-with-backoffrate-negative.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('allowed minimum is 1')
+  end
+
+  it 'should reject BackOffRate between 0 and 1' do
+    j = File.read "test/backoff-with-backoffrate-between-0-and-1.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(1)
+    expect(problems[0]).to include('allowed minimum is 1')
+  end
+
   it 'should reject empty ErrorEquals clauses' do
     j = File.read "test/empty-error-equals-on-catch.json"
     linter = StateMachineLint::Linter.new
