@@ -429,6 +429,14 @@ describe StateMachineLint do
     expect(problems.size).to eq(0)
   end
 
+  it 'should allow Choice Rule Variable to use kebab-case JSON Path' do
+    j = File.read "test/choice-rule-with-kebab-case-json-path.json"
+    j = JSON.parse j
+    linter = StateMachineLint::Linter.new
+    problems = linter.validate(j)
+    expect(problems.size).to eq(0)
+  end
+
   it 'should allow a Comment field in Catcher' do
     j = File.read "test/succeed-with-comment-in-catcher.json"
     linter = StateMachineLint::Linter.new

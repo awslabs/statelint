@@ -1,0 +1,18 @@
+{
+  "StartAt": "p",
+  "States": {
+    "p": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$['detail-type']",
+          "StringEquals": "x",
+          "Next": "x"
+        }
+      ]
+    },
+    "x": {
+      "Type": "Succeed"
+    }
+  }
+}
