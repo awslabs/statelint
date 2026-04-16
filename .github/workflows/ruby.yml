@@ -16,9 +16,9 @@ jobs:
         ruby-version: ['3.2']
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Set up Ruby ${{ matrix.ruby-version }}
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@7372622e62b60b3cb750dcd2b9e32c247ffec26a # v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
       - name: Install dependencies
